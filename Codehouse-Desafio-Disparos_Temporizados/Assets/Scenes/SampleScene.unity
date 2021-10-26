@@ -710,7 +710,6 @@ MonoBehaviour:
   cannonBallPrefab: {fileID: 2914368066848201424, guid: 7e80ac35313cd744497f647a8114b0fc, type: 3}
   timeInterval: 1.5
   speedCannon: 5
-  bulletLifeTime: 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2083,4 +2082,3 @@ MonoBehaviour:
   cannonBallPrefab: {fileID: 2914368066848201424, guid: c093085edef131844addb946cf77f214, type: 3}
   timeInterval: 1.5
   speedCannon: 5
-  bulletLifeTime: 1
