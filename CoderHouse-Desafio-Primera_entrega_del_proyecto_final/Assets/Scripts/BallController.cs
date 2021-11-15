@@ -4,69 +4,55 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
+    [SerializeField] private GameObject player;
+    Vector3 orginalScale;
     public int comboHits = 0;
     bool gameHasEnded = false;
     bool isCombo = false;
+    bool scaleModified = true;
     float i;
-    int contador = 0;
     // Start is called before the first frame update
     void Start()
     {
-
+        orginalScale = player.transform.localScale;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    // ---------------- MY METHODS -------------------------------------------------------
-    private void OnTriggerExit(Collider other)
-    {
-        //Debug.Log("Trigger: " + other.gameObject.name);
-        //Debug.Log("Update Combo: " + comboHits);
-        if (contador < 1)
+        if (isCombo && scaleModified)
         {
-            if (other.gameObject.tag == "Player"/* && !isCombo*/)
-            {
-                Debug.Log("Combo!: " + comboHits);
-                comboHits ++;
-                //isCombo = true;
-                contador++;
-            }
-           /* else if(other.gameObject.layer == 7 && isCombo)
-            {
-                Debug.Log("Combo!: " + comboHits);
-                comboHits++;
-                contador++;
-            }*/
-            else if (other.gameObject.tag == "Floor"/* && !isCombo*/)
-            {
-                Debug.Log("You haven´t doing combos yet :c");
-                comboHits = 0;
-                //isCombo = false;
-                contador++;
-            }
-            /*else if (other.gameObject.layer == 8 && isCombo)
-            {
-                Debug.Log("NO! You loose your combos :c");
-                comboHits = 0;
-                isCombo = false;
-                contador++;
-            }*/
-
+            IncreaseScale();
         }
         else
         {
-            contador = 0;
+            DecreaseScale();
         }
-
     }
+
+    // ---------------- MY METHODS -------------------------------------------------------
+    private void OnCollisionExit(Collision other)
+    {
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Combo!: " + comboHits);
+            comboHits += 1;
+            isCombo = true;
+                
+        }
+        else if (other.gameObject.CompareTag("Floor"))
+        {
+            Debug.Log("NOO");
+            comboHits = 0;
+            isCombo = false;    
+        }
+    }
+
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Floor")
+        if (other.gameObject.CompareTag("Floor"))
         {
             i += Time.deltaTime;
             if (i >= 5f)
@@ -75,6 +61,20 @@ public class BallController : MonoBehaviour
                 i = 0;
             }
         }    
+    }
+
+    private void IncreaseScale()
+    {
+        player.transform.localScale = player.transform.localScale + new Vector3(1 * Time.deltaTime, 1 * Time.deltaTime, 1 * Time.deltaTime);
+        Debug.Log("Great Combo!");
+        scaleModified = false;
+    }
+
+    private void DecreaseScale()
+    {
+        player.transform.localScale = orginalScale;
+        Debug.Log("You loose your combos :c");
+        scaleModified = true;
     }
 
     public bool GetGameState()

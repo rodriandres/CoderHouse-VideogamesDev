@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
     void comboCalculated()
     {
         Score = ball.GetComponent<BallController>().GetCombo();
-        Debug.Log("GM score: " + Score);
         if (Score > 0) {
             comboText.text = ("Combo: " + Score);
             comboText.color = color1;
