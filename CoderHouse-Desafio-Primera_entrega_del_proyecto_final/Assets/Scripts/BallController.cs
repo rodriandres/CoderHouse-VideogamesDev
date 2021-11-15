@@ -9,7 +9,7 @@ public class BallController : MonoBehaviour
     public int comboHits = 0;
     bool gameHasEnded = false;
     bool isCombo = false;
-    bool scaleModified = true;
+    bool scaleModified = false;
     float i;
     // Start is called before the first frame update
     void Start()
@@ -20,12 +20,14 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isCombo && scaleModified)
+        if (isCombo)
         {
+            Debug.Log(scaleModified);
             IncreaseScale();
         }
         else
         {
+            Debug.Log(scaleModified);
             DecreaseScale();
         }
     }
@@ -33,17 +35,15 @@ public class BallController : MonoBehaviour
     // ---------------- MY METHODS -------------------------------------------------------
     private void OnCollisionExit(Collision other)
     {
-
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Combo!: " + comboHits);
+            //Debug.Log("Combo!: " + comboHits);
             comboHits += 1;
-            isCombo = true;
-                
+            isCombo = true;   
         }
         else if (other.gameObject.CompareTag("Floor"))
         {
-            Debug.Log("NOO");
+            //Debug.Log("NOO");
             comboHits = 0;
             isCombo = false;    
         }
