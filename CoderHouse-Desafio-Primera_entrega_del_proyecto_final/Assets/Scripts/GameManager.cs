@@ -1,25 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Text tiempoText;
     [SerializeField] private GameObject ball;
     [SerializeField] private Rigidbody ballRb;
     [SerializeField] private TextMesh comboText;
+    float tiempo = 0.0f;
     bool gameHasEnded;
+    bool gameNeedRestart;
     int Score;
     Color color1;
     Color color2;
+    enum Pause { isPause = 1, notPause };
+    [SerializeField] private Pause pause;
 
-    
 
     // Start is called before the first frame update
     void Start()
     {
         Score = 0;
         ball = GameObject.FindGameObjectWithTag("Ball");
+        pause = Pause.notPause;
 
         ColorUtility.TryParseHtmlString("#00FF27", out color1);
         ColorUtility.TryParseHtmlString("#FF2100", out color2);
@@ -29,8 +35,13 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameHasEnded = ball.GetComponent<BallController>().GetGameState();
-        if (!gameHasEnded)
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PauseTheGame();
+        }
+
+        gameNeedRestart = ball.GetComponent<BallController>().GetGameState();
+        if (!gameNeedRestart)
         {
             comboCalculated();
         }
@@ -54,6 +65,21 @@ public class GameManager : MonoBehaviour
             comboText.color = color2;
         }
         
+    }
+
+    void PauseTheGame()
+    {
+        switch (pause)
+        {
+            case Pause.isPause:
+                Time.timeScale = 1;
+                pause = Pause.notPause;
+                break;
+            case Pause.notPause:
+                Time.timeScale = 0;
+                pause = Pause.isPause;
+                break;
+        }
     }
 
     void Restart()

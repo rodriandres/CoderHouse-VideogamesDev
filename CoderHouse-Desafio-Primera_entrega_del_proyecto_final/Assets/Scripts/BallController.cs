@@ -7,9 +7,8 @@ public class BallController : MonoBehaviour
     [SerializeField] private GameObject player;
     Vector3 orginalScale;
     public int comboHits = 0;
-    bool gameHasEnded = false;
+    bool gameNeedRestart = false;
     bool isCombo = false;
-    bool scaleModified = false;
     float i;
     // Start is called before the first frame update
     void Start()
@@ -20,16 +19,7 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isCombo)
-        {
-            Debug.Log(scaleModified);
-            IncreaseScale();
-        }
-        else
-        {
-            Debug.Log(scaleModified);
-            DecreaseScale();
-        }
+        
     }
 
     // ---------------- MY METHODS -------------------------------------------------------
@@ -37,15 +27,22 @@ public class BallController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //Debug.Log("Combo!: " + comboHits);
             comboHits += 1;
             isCombo = true;   
         }
         else if (other.gameObject.CompareTag("Floor"))
         {
-            //Debug.Log("NOO");
             comboHits = 0;
             isCombo = false;    
+        }
+
+        if (isCombo)
+        {
+            IncreaseScale();
+        }
+        else
+        {
+            DecreaseScale();
         }
     }
 
@@ -57,7 +54,7 @@ public class BallController : MonoBehaviour
             i += Time.deltaTime;
             if (i >= 5f)
             {
-                gameHasEnded = true;
+                gameNeedRestart = true;
                 i = 0;
             }
         }    
@@ -65,21 +62,19 @@ public class BallController : MonoBehaviour
 
     private void IncreaseScale()
     {
-        player.transform.localScale = player.transform.localScale + new Vector3(1 * Time.deltaTime, 1 * Time.deltaTime, 1 * Time.deltaTime);
+        player.transform.localScale = player.transform.localScale + new Vector3(5 * Time.deltaTime, 5 * Time.deltaTime, 5 * Time.deltaTime);
         Debug.Log("Great Combo!");
-        scaleModified = false;
     }
 
     private void DecreaseScale()
     {
         player.transform.localScale = orginalScale;
         Debug.Log("You loose your combos :c");
-        scaleModified = true;
     }
 
     public bool GetGameState()
     {
-        return gameHasEnded;
+        return gameNeedRestart;
     }
 
     public int GetCombo()
