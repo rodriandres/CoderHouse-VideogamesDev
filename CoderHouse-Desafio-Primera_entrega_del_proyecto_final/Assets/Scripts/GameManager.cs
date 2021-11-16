@@ -6,12 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Text tiempoText;
+    [SerializeField] private TextMesh tiempoText;
     [SerializeField] private GameObject ball;
     [SerializeField] private Rigidbody ballRb;
     [SerializeField] private TextMesh comboText;
+
+    float timeScale = -1f;
+    float timeOfFramWithTimeScale = 1f;
+    float timeInSecondsToShow = 0f;
+    float initialTime;
     float tiempo = 0.0f;
     bool gameHasEnded;
+
     bool gameNeedRestart;
     int Score;
     Color color1;
@@ -23,6 +29,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialTime = 30f;
         Score = 0;
         ball = GameObject.FindGameObjectWithTag("Ball");
         pause = Pause.notPause;
@@ -30,6 +37,8 @@ public class GameManager : MonoBehaviour
         ColorUtility.TryParseHtmlString("#00FF27", out color1);
         ColorUtility.TryParseHtmlString("#FF2100", out color2);
         comboText.color = color1;
+
+        InitialiteTimer();
     }
 
     // Update is called once per frame
@@ -65,6 +74,11 @@ public class GameManager : MonoBehaviour
             comboText.color = color2;
         }
         
+    }
+
+    void InitialiteTimer()
+    {
+
     }
 
     void PauseTheGame()
