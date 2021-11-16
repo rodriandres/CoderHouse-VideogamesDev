@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void OnCollisionStay()
+    void OnCollisionStay(Collision other)
     {
         isGrounded = true;
         isIddle = true;
