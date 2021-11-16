@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     Vector3 jump;
     [SerializeField] private float jumpForce = 2.0f;
     bool isGrounded;
+    bool isIddle;
     [SerializeField] private Rigidbody rb;
 
     [SerializeField] private Animator playerAnimator;
@@ -20,8 +21,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         jump = new Vector3(0.0f, 2.0f, 0.0f);
 
-        playerAnimator.SetBool("isRun", false );
-        playerAnimator.SetBool("isGrounded", true);
+        playerAnimator.SetBool("IsRun", false );
+        playerAnimator.SetBool("IsGrounded", true);
+        playerAnimator.SetBool("IsIddle", true);
     }
 
     // Update is called once per frame
@@ -38,12 +40,12 @@ public class PlayerController : MonoBehaviour
         
         if (vAxis != 0)
         {
-            playerAnimator.SetBool("isRun", true);
+            playerAnimator.SetBool("IsRun", true);
             transform.Translate(new Vector3(0, 0, vAxis) * speed * Time.deltaTime);
         }
         else
         {
-            playerAnimator.SetBool("isRun", false);
+            playerAnimator.SetBool("IsRun", false);
         }
     }
 
@@ -59,21 +61,29 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                playerAnimator.SetBool("isGrounded", true);
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+                playerAnimator.SetBool("IsGrounded", true);
+                playerAnimator.SetBool("IsIddle", true);
                 isGrounded = false;
+                isIddle = false;
+                
+                
             }
         }
         else
         {
-           playerAnimator.SetBool("isGrounded", false);
+            playerAnimator.SetBool("IsGrounded", false);
+            playerAnimator.SetBool("IsIddle", false);
+            isGrounded = true;
+            isIddle = true;
         }
 
-        
+
     }
 
-    void OnCollisionStay()
+    void OnCollisionStay(Collision other)
     {
         isGrounded = true;
+        isIddle = true;
     }
 }
