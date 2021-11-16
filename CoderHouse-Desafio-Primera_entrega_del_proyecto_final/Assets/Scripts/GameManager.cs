@@ -6,12 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Text tiempoText;
+    [SerializeField] private TextMesh timerText;
     [SerializeField] private GameObject ball;
     [SerializeField] private Rigidbody ballRb;
     [SerializeField] private TextMesh comboText;
+
+    int initialTime;
+    float timeScale = -1f;
+    float timeOfFramWithTimeScale = 1f;
+    float timeOfFramWithTimeScalePaused = 1f;
+    float timeOfFramWithTimeScaleInitial = 1f;
+    float timeInSecondsToShow = 0f;
     float tiempo = 0.0f;
     bool gameHasEnded;
+
     bool gameNeedRestart;
     int Score;
     Color color1;
@@ -27,9 +35,17 @@ public class GameManager : MonoBehaviour
         ball = GameObject.FindGameObjectWithTag("Ball");
         pause = Pause.notPause;
 
+        timeOfFramWithTimeScaleInitial = timeScale;
+        timeInSecondsToShow = initialTime;
+
+        TimeUpdate(initialTime);
+
+
         ColorUtility.TryParseHtmlString("#00FF27", out color1);
         ColorUtility.TryParseHtmlString("#FF2100", out color2);
         comboText.color = color1;
+
+        InitialiteTimer();
     }
 
     // Update is called once per frame
@@ -65,6 +81,31 @@ public class GameManager : MonoBehaviour
             comboText.color = color2;
         }
         
+    }
+
+    void TimeUpdate(float timeInSeconds)
+    {
+        int min = 0;
+        int seconds = 0;
+        string textOfTimer;
+
+        if (timeInSeconds < 0)
+        {
+            timeInSeconds = 0;
+        }
+
+        min = (int)timeInSeconds / 60;
+        seconds = (int)timeInSeconds % 60;
+
+        textOfTimer = min.ToString("00") + ":" + seconds.ToString("00");
+
+        timerText.text = textOfTimer;
+
+    }
+
+    void InitialiteTimer()
+    {
+
     }
 
     void PauseTheGame()
