@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
     [SerializeField] private TextMesh timerText;
     [SerializeField] private GameObject ball;
     [SerializeField] private Rigidbody ballRb;
@@ -20,13 +21,27 @@ public class GameManager : MonoBehaviour
     float tiempo = 0.0f;
     bool gameHasEnded;
 
-    bool gameNeedRestart;
-    int Score;
+    private bool gameNeedRestart;
+    private int Score;
     Color color1;
     Color color2;
     enum Pause { isPause = 1, notPause };
     [SerializeField] private Pause pause;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            Score = 0;
+            gameNeedRestart = false;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +71,6 @@ public class GameManager : MonoBehaviour
             PauseTheGame();
         }
 
-        gameNeedRestart = ball.GetComponent<BallController>().GetGameState();
         if (!gameNeedRestart)
         {
             comboCalculated();
@@ -68,9 +82,9 @@ public class GameManager : MonoBehaviour
         
     }
 
+    // METHODS FOR RESOLVE GAME ISSUES
     void comboCalculated()
     {
-        Score = ball.GetComponent<BallController>().GetCombo();
         if (Score > 0) {
             comboText.text = ("Combo: " + Score);
             comboText.color = color1;
@@ -83,6 +97,27 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void addScore(int value)
+    {
+        if (value == 0)
+        {
+            instance.Score = value;
+        }
+        else
+        {
+            instance.Score = Score + value;
+        }
+        
+    }
+
+    public void setGameState(bool isCombo)
+    {
+        instance.gameNeedRestart = isCombo;
+    }
+
+
+
+    // METHODS THAT MODIFY THE STATUS OF THE GAME
     void TimeUpdate(float timeInSeconds)
     {
         int min = 0;
