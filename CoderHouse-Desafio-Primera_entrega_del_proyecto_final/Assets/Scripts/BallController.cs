@@ -6,10 +6,12 @@ public class BallController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     Vector3 orginalScale;
-    public int comboHits = 0;
-    bool gameNeedRestart = false;
+    //private int comboHits = 0;
+    //bool gameNeedRestart = false;
     bool isCombo = false;
     float i;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +29,13 @@ public class BallController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            comboHits += 1;
+            GameManager.instance.addScore(1);
+            //comboHits += 1;
             isCombo = true;   
         }
         else if (other.gameObject.CompareTag("Floor"))
         {
-            comboHits = 0;
+            GameManager.instance.addScore(0);
             isCombo = false;    
         }
 
@@ -54,7 +57,7 @@ public class BallController : MonoBehaviour
             i += Time.deltaTime;
             if (i >= 5f)
             {
-                gameNeedRestart = true;
+                GameManager.instance.setGameState(true);
                 i = 0;
             }
         }    
@@ -72,15 +75,15 @@ public class BallController : MonoBehaviour
         Debug.Log("You loose your combos :c");
     }
 
-    public bool GetGameState()
+    /*public bool GetGameState()
     {
-        return gameNeedRestart;
+        return instance.gameNeedRestart;
     }
 
     public int GetCombo()
     {
         return comboHits;
-    }
+    }*/
 
     
 }
