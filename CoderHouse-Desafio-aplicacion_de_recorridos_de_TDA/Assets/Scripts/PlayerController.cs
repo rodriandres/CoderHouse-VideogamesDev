@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
             GameObject newItem = other.gameObject;
             newItem.SetActive(false);
             inventory.addItemToInventory(newItem);
+            Debug.Log(inventory);
         }
     }
 
